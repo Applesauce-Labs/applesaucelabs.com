@@ -3,11 +3,12 @@
  * and scoped locally.
  */
 
-.heroBanner {
+ .heroBanner {
   padding: 4rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background-color: white;
 }
 
 @media screen and (max-width: 996px) {
@@ -16,8 +17,103 @@
   }
 }
 
-.buttons {
+.contactBadge {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 3.5in; /* Standard business card width */
+  height: 2in; /* Standard business card height */
+  padding: 0.25in;
+  border: 1px solid var(--ifm-color-primary);
+  border-radius: 0.125in;
+  margin: 2rem auto;
+  box-sizing: border-box;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contactInfo {
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 0.25in;
+  font-size: 0.14in; /* Adjust font size to fit content */
+}
+
+.contactInfo h2 {
+  margin-bottom: 0.1in;
+  font-size: 0.18in;
+}
+
+.contactInfo p {
+  margin: 0.05in 0;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  width: 0.14in;
+  height: 0.14in;
+  margin-right: 0.05in;
+  flex-shrink: 0;
+}
+
+.qrCode {
+  flex-shrink: 0;
+}
+
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.feature {
+  padding: 2rem;
+  text-align: center;
+}
+
+.feature h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.feature p {
+  font-size: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+  .contactBadge {
+    width: 90%;
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  .contactInfo {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .contactInfo h2 {
+    font-size: 18px;
+  }
+
+  .contactInfo p {
+    justify-content: center;
+  }
+
+  .icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+  }
+
+  .qrCode {
+    margin-bottom: 0.5rem;
+  }
 }
