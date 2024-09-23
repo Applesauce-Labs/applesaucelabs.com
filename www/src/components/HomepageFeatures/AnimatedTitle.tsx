@@ -22,7 +22,6 @@ const AnimatedTitle: React.FC = () => {
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
-    const lineY = canvasHeight / 2;
 
     const morphSteps = 10;
     const spiralDuration = 5000; // milliseconds
@@ -30,24 +29,6 @@ const AnimatedTitle: React.FC = () => {
     const spiralTurns = 3;
     const spiralWidth = 50;
     const numPoints = 1000; // Adjust as needed
-
-    // Initialize points
-    const points: Point[] = [];
-
-    // Generate initial line points
-    for (let i = 0; i < numPoints; i++) {
-      const x = (i / (numPoints - 1)) * canvasWidth;
-      const y = lineY;
-      points.push({
-        initialX: x,
-        initialY: y,
-        finalX: 0, // To be set
-        finalY: 0, // To be set
-        morphStep: 0,
-        currentX: x,
-        currentY: y,
-      });
-    }
 
     // Compute pathPoints from pathData
     function computePathPoints(pathData: any[]): { x: number; y: number }[] {
@@ -126,6 +107,26 @@ const AnimatedTitle: React.FC = () => {
       p.x = p.x * scale + offsetX;
       p.y = p.y * scale + offsetY;
     });
+
+    // Set lineY to match the starting Y position of the path
+    const lineY = pathPoints[0].y;
+
+    // Initialize points along the horizontal line aligned with the path
+    const points: Point[] = [];
+
+    for (let i = 0; i < numPoints; i++) {
+      const x = (i / (numPoints - 1)) * canvasWidth;
+      const y = lineY;
+      points.push({
+        initialX: x,
+        initialY: y,
+        finalX: 0, // To be set
+        finalY: 0, // To be set
+        morphStep: 0,
+        currentX: x,
+        currentY: y,
+      });
+    }
 
     // Compute cumulative lengths
     const cumulativeLengths: number[] = [0];
