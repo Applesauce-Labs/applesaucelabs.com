@@ -3,12 +3,16 @@
  * and scoped locally.
  */
 
+/* Import Playwrite US Trad font */
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&display=swap');
+
  .heroBanner {
-  padding: 4rem 0;
+/*  padding: 4rem 0; */
   text-align: center;
   position: relative;
   overflow: hidden;
   background-color: white;
+  width: 100vw; /* Make the hero banner full width */
 }
 
 @media screen and (max-width: 996px) {
@@ -21,10 +25,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 3.5in; /* Standard business card width */
+  width: calc(3.5in + 25px); /* Increased width by 25px */
   height: 2in; /* Standard business card height */
   padding: 0.25in;
-  border: 1px solid var(--ifm-color-primary);
+  border: 2px dotted #D3D3D3; /* Light gray dotted border */
   border-radius: 0.125in;
   margin: 2rem auto;
   box-sizing: border-box;
@@ -75,8 +79,9 @@
 
 .feature h3 {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 400; /* Adjust as needed, the font supports 100 to 400 weight */
   margin-bottom: 1rem;
+  font-family: 'Playwrite US Trad', cursive;
 }
 
 .feature p {
@@ -85,7 +90,7 @@
 
 @media screen and (max-width: 768px) {
   .contactBadge {
-    width: 90%;
+    width: calc(90% + 25px); /* Increased width by 25px for mobile view */
     height: auto;
     flex-direction: column;
     align-items: center;

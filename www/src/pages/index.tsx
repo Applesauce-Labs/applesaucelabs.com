@@ -8,12 +8,24 @@ import AnimatedTitle from '@site/src/components/HomepageFeatures/AnimatedTitle';
 import styles from './index.module.css';
 
 function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero', styles.heroBanner)}>
-      <div className="container">
         <AnimatedTitle />
-        <div className={styles.contactBadge}>
+    </header>
+  );
+}
+
+export default function Home(): JSX.Element {
+  const { siteConfig } = useDocusaurusContext();
+  return (
+    <Layout
+      title={`Welcome to ${siteConfig.title}`}
+      description="Applesauce Labs - Technology Consulting">
+      <HomepageHeader />
+      <main>
+ 
+      <div className={styles.contactBadge}> 
           <div className={styles.qrCode}>
             <QRCodeSVG 
               value="mailto:sherman@applesaucelabs.com"
@@ -39,32 +51,20 @@ function HomepageHeader() {
             </p>
           </div>
         </div>
-      </div>
-    </header>
-  );
-}
 
-export default function Home(): JSX.Element {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <Layout
-      title={`Welcome to ${siteConfig.title}`}
-      description="Applesauce Labs - Technology Consulting">
-      <HomepageHeader />
-      <main>
         <section className={styles.features}>
           <div className="container">
             <div className="row">
               <div className={clsx('col col--4', styles.feature)}>
-                <h3>Consulting</h3>
+                <h3 style={{ fontFamily: "'Playwrite US Trad', cursive" }}>Consulting</h3>
                 <p>Expert technology advice tailored to your needs</p>
               </div>
               <div className={clsx('col col--4', styles.feature)}>
-                <h3>Development</h3>
+                <h3 style={{ fontFamily: "'Playwrite US Trad', cursive" }}>Development</h3>
                 <p>Custom software solutions for your business</p>
               </div>
               <div className={clsx('col col--4', styles.feature)}>
-                <h3>Training</h3>
+                <h3 style={{ fontFamily: "'Playwrite US Trad', cursive" }}>Training</h3>
                 <p>Empower your team with cutting-edge skills</p>
               </div>
             </div>

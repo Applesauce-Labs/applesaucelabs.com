@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import pathData from './pathData.json';
 
+import styles from './AnimatedTitle.module.css';
+
+
 interface Point {
   initialX: number;
   initialY: number;
@@ -213,7 +216,16 @@ const AnimatedTitle: React.FC = () => {
     requestAnimationFrame(animate);
   }, []);
 
-  return <canvas ref={canvasRef} width={800} height={600} />;
+  return (
+    <div className={styles.canvasContainer}>
+      <canvas
+        ref={canvasRef}
+        className={styles.canvas}
+        aria-label="Animated title: Applesauce Labs"
+        role="img"
+      />
+    </div>
+  );
 };
 
 export default AnimatedTitle;
