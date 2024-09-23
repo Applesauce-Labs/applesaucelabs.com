@@ -2,344 +2,217 @@ import React, { useRef, useEffect } from 'react';
 import pathData from './pathData.json';
 
 interface Point {
-    x: number;
-    y: number;
+  initialX: number;
+  initialY: number;
+  finalX: number;
+  finalY: number;
+  morphStep: number;
+  currentX: number;
+  currentY: number;
 }
 
 const AnimatedTitle: React.FC = () => {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    useEffect(() => {
-        let animationFrameId: number;
-        let t = 0;
-        const fps = 60; // Frames per second
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-        // Animation parameters
-        const N_steps = 30; // Number of morph steps
-        const spiralDuration = 5; // Time for the spiral to travel from left to right (in seconds)
-        const spiralInterval = 1; // Time between spirals starting from the left (in seconds)
-        const A = 25; // Amplitude of spiral effect (in pixels)
-        const spiralTurns = 5; // Number of turns in the spiral
-        const spiralSpeed = 1; // Speed at which the spiral moves (1 for normal speed)
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const lineY = canvasHeight / 2;
 
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+    const morphSteps = 10;
+    const spiralDuration = 5000; // milliseconds
+    const amplitude = 20;
+    const spiralTurns = 3;
+    const spiralWidth = 50;
+    const numPoints = 1000; // Adjust as needed
 
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
+    // Initialize points
+    const points: Point[] = [];
 
-        const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = 300; // Adjust canvas height as needed
-        };
+    // Generate initial line points
+    for (let i = 0; i < numPoints; i++) {
+      const x = (i / (numPoints - 1)) * canvasWidth;
+      const y = lineY;
+      points.push({
+        initialX: x,
+        initialY: y,
+        finalX: 0, // To be set
+        finalY: 0, // To be set
+        morphStep: 0,
+        currentX: x,
+        currentY: y,
+      });
+    }
 
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+    // Compute pathPoints from pathData
+    function computePathPoints(pathData: any[]): { x: number; y: number }[] {
+      const pathPoints: { x: number; y: number }[] = [];
+      let currentX = 0;
+      let currentY = 0;
+      pathData.forEach((command) => {
+        if (command.code === 'M') {
+          // Move to
+          currentX = command.x;
+          currentY = command.y;
+          pathPoints.push({ x: currentX, y: currentY });
+        } else if (command.code === 'C') {
+          // Cubic Bezier curve
+          const x0 = currentX;
+          const y0 = currentY;
+          const x1 = command.x1;
+          const y1 = command.y1;
+          const x2 = command.x2;
+          const y2 = command.y2;
+          const x3 = command.x;
+          const y3 = command.y;
 
-        // Helper functions for Bezier curves
-        function cubicBezier(p0: number, p1: number, p2: number, p3: number, t: number) {
-            const u = 1 - t;
-            return (
-                u * u * u * p0 +
-                3 * u * u * t * p1 +
-                3 * u * t * t * p2 +
-                t * t * t * p3
-            );
+          // Sample points along the curve
+          const numSamples = 20; // Adjust as needed
+          for (let t = 0; t <= 1; t += 1 / numSamples) {
+            const x = cubicBezier(x0, x1, x2, x3, t);
+            const y = cubicBezier(y0, y1, y2, y3, t);
+            pathPoints.push({ x, y });
+          }
+
+          currentX = x3;
+          currentY = y3;
+        }
+        // Handle other commands if present
+      });
+      return pathPoints;
+    }
+
+    function cubicBezier(p0: number, p1: number, p2: number, p3: number, t: number): number {
+      const c0 = (1 - t) ** 3;
+      const c1 = 3 * (1 - t) ** 2 * t;
+      const c2 = 3 * (1 - t) * t ** 2;
+      const c3 = t ** 3;
+      return c0 * p0 + c1 * p1 + c2 * p2 + c3 * p3;
+    }
+
+    const pathPoints = computePathPoints(pathData);
+
+    // Compute bounding box
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+
+    pathPoints.forEach((p) => {
+      if (p.x < minX) minX = p.x;
+      if (p.x > maxX) maxX = p.x;
+      if (p.y < minY) minY = p.y;
+      if (p.y > maxY) maxY = p.y;
+    });
+
+    const pathWidth = maxX - minX;
+    const pathHeight = maxY - minY;
+
+    // Compute scale and offsets
+    const scaleX = (canvasWidth * 0.8) / pathWidth;
+    const scaleY = (canvasHeight * 0.8) / pathHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    const offsetX = (canvasWidth - pathWidth * scale) / 2 - minX * scale;
+    const offsetY = (canvasHeight - pathHeight * scale) / 2 - minY * scale;
+
+    // Adjust pathPoints
+    pathPoints.forEach((p) => {
+      p.x = p.x * scale + offsetX;
+      p.y = p.y * scale + offsetY;
+    });
+
+    // Compute cumulative lengths
+    const cumulativeLengths: number[] = [0];
+    for (let i = 1; i < pathPoints.length; i++) {
+      const dx = pathPoints[i].x - pathPoints[i - 1].x;
+      const dy = pathPoints[i].y - pathPoints[i - 1].y;
+      const distance = Math.hypot(dx, dy);
+      cumulativeLengths.push(cumulativeLengths[i - 1] + distance);
+    }
+
+    const totalLength = cumulativeLengths[cumulativeLengths.length - 1];
+
+    // Assign final positions to points
+    for (let i = 0; i < numPoints; i++) {
+      const targetLength = (i / (numPoints - 1)) * totalLength;
+      // Find index j
+      let j = 0;
+      while (j < cumulativeLengths.length - 1 && cumulativeLengths[j + 1] < targetLength) {
+        j++;
+      }
+      const lengthBefore = cumulativeLengths[j];
+      const lengthAfter = cumulativeLengths[j + 1];
+      const t = (targetLength - lengthBefore) / (lengthAfter - lengthBefore);
+
+      const x = pathPoints[j].x * (1 - t) + pathPoints[j + 1].x * t;
+      const y = pathPoints[j].y * (1 - t) + pathPoints[j + 1].y * t;
+
+      points[i].finalX = x;
+      points[i].finalY = y;
+    }
+
+    const startTime = performance.now();
+
+    function animate(time: number) {
+      const elapsed = time - startTime;
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      // Compute spiral position
+      const spiralProgress = (elapsed % spiralDuration) / spiralDuration;
+      const spiralX = spiralProgress * canvasWidth;
+
+      // Draw points
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+
+        // Base position based on morphStep
+        const t = point.morphStep / morphSteps;
+        const baseX = point.initialX * (1 - t) + point.finalX * t;
+        const baseY = point.initialY * (1 - t) + point.finalY * t;
+
+        // Check if spiral is over the point
+        const dx = point.initialX - spiralX;
+        if (Math.abs(dx) < spiralWidth / 2) {
+          // Spiral is over the point
+
+          // Apply temporary displacement
+          const angle = ((dx / (spiralWidth / 2)) * Math.PI * spiralTurns);
+          const spiralEffect = Math.sin(angle) * amplitude;
+          const displacedY = baseY + spiralEffect;
+
+          // Update point position
+          point.currentX = baseX;
+          point.currentY = displacedY;
+
+          // Advance morphStep
+          if (point.morphStep < morphSteps) {
+            point.morphStep += 1;
+          }
+        } else {
+          // Spiral not over point
+          point.currentX = baseX;
+          point.currentY = baseY;
         }
 
-        // Number of points to sample along the path
-        const numPoints = 2000; // Increased for smoother animation
+        // Draw point
+        ctx.beginPath();
+        ctx.arc(point.currentX, point.currentY, 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
-        // Initialize morph steps for each point
-        const morphSteps = new Array(numPoints).fill(0); // Morph step for each point
+      requestAnimationFrame(animate);
+    }
 
-        // Function to flatten the path into segments and sample points
-        function getFlattenedPathPoints(pathData: any[], numPoints: number): Point[] {
-            const segments: { length: number; points: Point[] }[] = [];
-            let currentX = 0;
-            let currentY = 0;
-            let totalLength = 0;
+    requestAnimationFrame(animate);
+  }, []);
 
-            for (let cmd of pathData) {
-                const code = cmd.code;
-                switch (code) {
-                    case 'M':
-                        if (cmd.x === undefined || cmd.y === undefined) {
-                            throw new Error(`'M' command is missing 'x' or 'y' property: ${JSON.stringify(cmd)}`);
-                        }
-                        currentX = cmd.x;
-                        currentY = cmd.y;
-                        break;
-                    case 'C':
-                        {
-                            const requiredProps = ['x1', 'y1', 'x2', 'y2', 'x', 'y'];
-                            for (const prop of requiredProps) {
-                                if (cmd[prop] === undefined) {
-                                    throw new Error(`'C' command is missing '${prop}' property: ${JSON.stringify(cmd)}`);
-                                }
-                            }
-
-                            const startX = currentX;
-                            const startY = currentY;
-                            const steps = 50; // Increased steps for smoother curves
-                            const points: Point[] = [];
-                            let prevX = startX;
-                            let prevY = startY;
-                            let segmentLength = 0;
-
-                            for (let i = 1; i <= steps; i++) {
-                                const t = i / steps;
-                                const x = cubicBezier(currentX, cmd.x1, cmd.x2, cmd.x, t);
-                                const y = cubicBezier(currentY, cmd.y1, cmd.y2, cmd.y, t);
-                                segmentLength += Math.hypot(x - prevX, y - prevY);
-                                points.push({ x, y });
-                                prevX = x;
-                                prevY = y;
-                            }
-
-                            segments.push({
-                                length: segmentLength,
-                                points: [{ x: startX, y: startY }, ...points],
-                            });
-                            totalLength += segmentLength;
-                            currentX = cmd.x;
-                            currentY = cmd.y;
-                        }
-                        break;
-                    default:
-                        console.warn(`Unsupported path command: ${cmd.code}`);
-                        break;
-                }
-            }
-
-            if (segments.length === 0) {
-                throw new Error('No segments were generated from the pathData.');
-            }
-
-            if (totalLength === 0) {
-                throw new Error('Total length of path is zero.');
-            }
-
-            // Sample points along the path
-            const pathPoints: Point[] = [];
-            const increment = totalLength / (numPoints - 1);
-            let segmentIndex = 0;
-            let segmentDistance = 0;
-
-            for (let i = 0; i < numPoints; i++) {
-                const targetDistance = increment * i;
-                while (
-                    segmentIndex < segments.length &&
-                    segmentDistance + segments[segmentIndex].length < targetDistance
-                ) {
-                    segmentDistance += segments[segmentIndex].length;
-                    segmentIndex++;
-                }
-
-                if (segmentIndex >= segments.length) {
-                    // We've reached the end of the path
-                    const lastSegment = segments[segments.length - 1];
-                    const lastPoint = lastSegment.points[lastSegment.points.length - 1];
-                    pathPoints.push(lastPoint);
-                    continue;
-                }
-
-                const segment = segments[segmentIndex];
-                const segmentStartDistance = segmentDistance;
-                const segmentProgress = (targetDistance - segmentStartDistance) / segment.length;
-
-                // Interpolate within the segment
-                const points = segment.points;
-                const index = segmentProgress * (points.length - 1);
-                const lowerIndex = Math.floor(index);
-                const upperIndex = Math.ceil(index);
-                const t = index - lowerIndex;
-
-                const p0 = points[lowerIndex];
-                const p1 = points[upperIndex];
-
-                const x = p0.x + (p1.x - p0.x) * t;
-                const y = p0.y + (p1.y - p0.y) * t;
-
-                pathPoints.push({ x, y });
-            }
-
-            return pathPoints;
-        }
-
-        // Get the starting and ending points of the path
-        function getPathStartEndPoints(pathData: any[]): { start: Point; end: Point } {
-            let start: Point | null = null;
-            let end: Point | null = null;
-            let currentX = 0;
-            let currentY = 0;
-
-            for (let cmd of pathData) {
-                const code = cmd.code;
-                switch (code) {
-                    case 'M':
-                        currentX = cmd.x;
-                        currentY = cmd.y;
-                        if (!start) {
-                            start = { x: currentX, y: currentY };
-                        }
-                        end = { x: currentX, y: currentY };
-                        break;
-                    case 'C':
-                        currentX = cmd.x;
-                        currentY = cmd.y;
-                        end = { x: currentX, y: currentY };
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (!start || !end) {
-                throw new Error('Unable to determine start or end point of the path');
-            }
-
-            return { start, end };
-        }
-
-        let pathPoints: Point[] = [];
-        let linePoints: Point[] = [];
-        let interpolatedPoints: Point[] = [];
-
-        // Calculate path points and line points
-        try {
-            pathPoints = getFlattenedPathPoints(pathData, numPoints);
-
-            const { start, end } = getPathStartEndPoints(pathData);
-
-            // Generate straight line points
-            linePoints = [];
-            for (let i = 0; i < numPoints; i++) {
-                const t = i / (numPoints - 1);
-                const x = start.x + (end.x - start.x) * t;
-                const y = start.y + (end.y - start.y) * t;
-                linePoints.push({ x, y });
-            }
-        } catch (error) {
-            console.error('Error processing path data:', error);
-            return;
-        }
-
-        const { minX, minY, maxX, maxY } = calculateBoundingBox(pathPoints);
-        const pathWidth = maxX - minX;
-        const pathHeight = maxY - minY;
-
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 2;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-          
-            ctx.save();
-          
-            // Scale to fit canvas width
-            const scale = canvas.width / pathWidth;
-            ctx.scale(scale, scale);
-          
-            // Translate to center vertically
-            const verticalOffset = (canvas.height / scale - pathHeight) / 2;
-            ctx.translate(-minX, verticalOffset - minY);
-          
-            interpolatedPoints = [];
-          
-            const currentTime = t / fps; // Current time in seconds
-          
-            for (let i = 0; i < numPoints; i++) {
-              const s = i / (numPoints - 1);
-          
-              let totalOffsetX = 0;
-              let totalOffsetY = 0;
-          
-              // Determine if the spiral is affecting this point
-              const spiralProgress = (currentTime % spiralDuration) / spiralDuration;
-              const spiralPosition = spiralProgress * spiralSpeed; // From 0 to 1
-          
-              if (s >= spiralPosition && s <= spiralPosition + 0.1) {
-                // Spiral is currently affecting this point
-                const envelope = 1 - Math.abs(s - (spiralPosition + 0.05)) / 0.05; // Triangular envelope
-                const angle = 2 * Math.PI * spiralTurns * (s - spiralPosition);
-          
-                const offset = A * envelope;
-          
-                // Calculate position based on spiral equations
-                totalOffsetX = offset * Math.cos(angle);
-                totalOffsetY = offset * Math.sin(angle);
-          
-                // Increment morph step for this point
-                if (morphSteps[i] < N_steps) {
-                  morphSteps[i]++;
-                }
-              }
-          
-              const morphProgress = morphSteps[i] / N_steps;
-          
-              // Calculate the interpolated position
-              const linePoint = linePoints[i];
-              const pathPoint = pathPoints[i];
-          
-              const x =
-                linePoint.x + (pathPoint.x - linePoint.x) * morphProgress + totalOffsetX;
-              const y =
-                linePoint.y + (pathPoint.y - linePoint.y) * morphProgress + totalOffsetY;
-          
-              interpolatedPoints.push({ x, y });
-            }
-          
-            // Draw the interpolated path
-            ctx.beginPath();
-            ctx.moveTo(interpolatedPoints[0].x, interpolatedPoints[0].y);
-          
-            for (let i = 1; i < interpolatedPoints.length; i++) {
-              ctx.lineTo(interpolatedPoints[i].x, interpolatedPoints[i].y);
-            }
-          
-            ctx.stroke();
-            ctx.restore();
-          
-            t += 1;
-            animationFrameId = requestAnimationFrame(animate);
-          };
-          
-
-        // Function to calculate the bounding box of points
-        function calculateBoundingBox(points: Point[]) {
-            let minX = Infinity;
-            let minY = Infinity;
-            let maxX = -Infinity;
-            let maxY = -Infinity;
-
-            for (let point of points) {
-                minX = Math.min(minX, point.x);
-                minY = Math.min(minY, point.y);
-                maxX = Math.max(maxX, point.x);
-                maxY = Math.max(maxY, point.y);
-            }
-
-            return { minX, minY, maxX, maxY };
-        }
-
-        animate();
-
-        return () => {
-            cancelAnimationFrame(animationFrameId);
-            window.removeEventListener('resize', resizeCanvas);
-        };
-    }, []);
-
-    return (
-        <canvas
-            ref={canvasRef}
-            style={{ width: '100%', height: '300px' }}
-            aria-label="Animated title"
-            role="img"
-        />
-    );
+  return <canvas ref={canvasRef} width={800} height={600} />;
 };
 
 export default AnimatedTitle;
