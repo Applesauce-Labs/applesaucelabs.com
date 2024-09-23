@@ -7,18 +7,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&display=swap');
 
  .heroBanner {
-/*  padding: 4rem 0; */
   text-align: center;
   position: relative;
   overflow: hidden;
   background-color: white;
   width: 100vw; /* Make the hero banner full width */
-}
-
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 16px;
+  padding-top: 64px;
 }
 
 .contactBadge {

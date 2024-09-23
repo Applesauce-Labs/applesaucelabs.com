@@ -23,15 +23,24 @@ const AnimatedTitle: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvas.height;
 
-    const morphSteps = 10;
-    const spiralDuration = 5000; // milliseconds
+    const resizeCanvas = () => {
+      // Set the canvas dimensions to match its parent container's size
+      canvas.width = canvas.parentElement?.offsetWidth || canvas.width;
+      canvas.height = canvas.parentElement?.offsetHeight || canvas.height;
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      console.log("Canvas Width: ", canvasWidth, " Canvas Height: ", canvasHeight)
+  
+    
+      // ... rest of your animation logic using the new width and height
+    
+    const morphSteps = 100;
+    const spiralDuration = 3000; // milliseconds
     const amplitude = 20;
-    const spiralTurns = 3;
-    const spiralWidth = 50;
-    const numPoints = 1000; // Adjust as needed
+    const spiralTurns = 6;
+    const spiralWidth = 100;
+    const numPoints = 1400; // Adjust as needed
 
     // Compute pathPoints from pathData
     function computePathPoints(pathData: any[]): { x: number; y: number }[] {
@@ -214,7 +223,19 @@ const AnimatedTitle: React.FC = () => {
     }
 
     requestAnimationFrame(animate);
-  }, []);
+  };
+
+  // Initial canvas resize
+  resizeCanvas();
+
+  // Listen for window resize events and update canvas dimensions
+  window.addEventListener('resize', resizeCanvas);
+
+  // Clean up the event listener on component unmount
+  return () => {
+    window.removeEventListener('resize', resizeCanvas);
+  };
+}, []); 
 
   return (
     <div className={styles.canvasContainer}>
