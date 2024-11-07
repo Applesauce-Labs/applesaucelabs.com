@@ -1,11 +1,11 @@
-yangshun:
-  name: Yangshun Tay
-  title: Front End Engineer @ Facebook
-  url: https://github.com/yangshun
-  image_url: https://github.com/yangshun.png
+shermanboyd:
+  name: Sherman Boyd
+  title: Chief Engineer
+  url: https://github.com/shermanhuman
+  image_url: https://www.gravatar.com/avatar/647187a18dde297329ac4f4f104be3cf1888598ebb39f9797b08673fae51a69b
   page: true
   socials:
-    x: yangshunz
+    x: 
     github: yangshun
 
 slorber:
