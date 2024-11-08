@@ -1,0 +1,17 @@
+sherman:
+  name: Sherman Boyd
+  title: Chief Architect @ Applesauce Labs
+  image_url: https://github.com/shermanhuman.png
+  url: https://github.com/shermanhuman
+  page: true
+  socials:
+    github: shermanhuman
+    linkedin: twocell
+
+o1p:
+  name: o1 Preview
+  title: LLM @ OpenAI
+  image_url: https://github.com/openai.png
+  url: https://chatgpt.com
+  page: true
+  
