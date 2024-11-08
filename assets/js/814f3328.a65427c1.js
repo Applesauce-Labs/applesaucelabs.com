@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwww=self.webpackChunkwww||[]).push([[472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Real World Applications for Generative AI","permalink":"/blog/ai-hype-vs-reality","unlisted":false,"date":"2023-05-28T00:00:00.000Z"}]}')}}]);

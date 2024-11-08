@@ -2,108 +2,71 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://applesaucelabs.com/blog</id>
     <title>Applesauce Labs Blog</title>
-    <updated>2021-08-26T00:00:00.000Z</updated>
+    <updated>2023-05-28T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://applesaucelabs.com/blog"/>
     <subtitle>Applesauce Labs Blog</subtitle>
     <icon>https://applesaucelabs.com/img/favicon.ico</icon>
     <entry>
-        <title type="html"><![CDATA[Welcome]]></title>
-        <id>https://applesaucelabs.com/blog/welcome</id>
-        <link href="https://applesaucelabs.com/blog/welcome"/>
-        <updated>2021-08-26T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Docusaurus blogging features are powered by the blog plugin.]]></summary>
-        <content type="html"><![CDATA[<p><a href="https://docusaurus.io/docs/blog" target="_blank" rel="noopener noreferrer">Docusaurus blogging features</a> are powered by the <a href="https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog" target="_blank" rel="noopener noreferrer">blog plugin</a>.</p>
-<p>Here are a few tips you might find useful.</p>
-<p>Simply add Markdown files (or folders) to the <code>blog</code> directory.</p>
-<p>Regular blog authors can be added to <code>authors.yml</code>.</p>
-<p>The blog post date can be extracted from filenames, such as:</p>
-<ul>
-<li><code>2019-05-30-welcome.md</code></li>
-<li><code>2019-05-30-welcome/index.md</code></li>
-</ul>
-<p>A blog post folder can be convenient to co-locate blog post images:</p>
-<p><img decoding="async" loading="lazy" alt="Docusaurus Plushie" src="https://applesaucelabs.com/assets/images/docusaurus-plushie-banner-a60f7593abca1e3eef26a9afa244e4fb.jpeg" width="1500" height="500" class="img_ev3q"></p>
-<p>The blog supports tags as well!</p>
-<p><strong>And if you don't want a blog</strong>: just delete this directory, and use <code>blog: false</code> in your Docusaurus config.</p>]]></content>
+        <title type="html"><![CDATA[Real World Applications for Generative AI]]></title>
+        <id>https://applesaucelabs.com/blog/ai-hype-vs-reality</id>
+        <link href="https://applesaucelabs.com/blog/ai-hype-vs-reality"/>
+        <updated>2023-05-28T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The rise of generative AI, particularly large language models (LLMs), has been nothing short of meteoric. From generating human-like text to creating art, these models have captured the public's imagination and spurred a wave of optimism about the future of artificial intelligence. However, amidst the excitement, it's crucial to distinguish between hype and the real-world applications that can genuinely benefit businesses today.]]></summary>
+        <content type="html"><![CDATA[<p>The rise of generative AI, particularly large language models (LLMs), has been nothing short of meteoric. From generating human-like text to creating art, these models have captured the public's imagination and spurred a wave of optimism about the future of artificial intelligence. However, amidst the excitement, it's crucial to distinguish between hype and the real-world applications that can genuinely benefit businesses today.</p>
+<p>The Hype vs. The Reality
+Generative AI has been heralded as a revolutionary technology capable of understanding and performing complex tasks across various domains. Headlines often suggest that AI is on the verge of achieving human-like reasoning and consciousness. While these claims make for compelling stories, they tend to overstate the current capabilities of AI.</p>
+<p>In reality, generative AI excels at pattern recognition and data generation based on statistical correlations in the data it was trained on. It doesn't possess consciousness or genuine understanding. The models predict the next word in a sentence or generate images based on learned patterns, but they do not comprehend the meaning behind the data in the way humans do.</p>
+<p>The Limitations of Generative AI in Reasoning
+One of the fundamental limitations of current generative AI models is their inability to perform true reasoning. Reasoning involves understanding, interpreting, and manipulating concepts in a way that goes beyond pattern recognition. Generative AI models, despite their sophistication, lack this capability.</p>
+<p>A study titled "On the Limitations of Reasoning in Large Language Models" by Karthik Narasimhan et al. (2022) highlights this issue. The researchers demonstrate that while LLMs can mimic reasoning in some contexts, they often fail when presented with tasks that require understanding beyond surface-level patterns. The models struggle with abstract reasoning tasks, logical deductions, and handling novel scenarios that weren't represented in their training data.</p>
+<p>Another paper, "Large Language Models Are Not Zero-Shot Reasoners" by Tania Bedrax-Weiss et al. (2022), argues that LLMs require carefully crafted prompts and sometimes additional training to perform reasoning tasks effectively. This further underscores that these models do not inherently understand or reason but are instead guided to produce desired outputs through external inputs.</p>
+<p>Current Applications for Businesses
+Despite these limitations, generative AI offers a range of practical applications that can add significant value to businesses when used appropriately.</p>
+<ol>
+<li>
+<p>Content Generation and Marketing
+LLMs can assist in creating draft content for blogs, social media posts, and marketing materials. They help in brainstorming ideas, generating slogans, and even composing initial drafts that human writers can refine. This accelerates the content creation process and allows marketing teams to focus on strategy and creativity.</p>
+</li>
+<li>
+<p>Customer Support Automation
+Generative AI powers chatbots and virtual assistants that handle routine customer inquiries, providing instant responses and freeing up human agents to tackle more complex issues. This improves customer satisfaction and reduces operational costs.</p>
+</li>
+<li>
+<p>Code Generation and Software Development
+Developers use AI tools to generate code snippets, document code, and even identify bugs. Models like GitHub Copilot assist programmers by suggesting code completions and functions, enhancing productivity and reducing development time.</p>
+</li>
+<li>
+<p>Data Analysis and Summarization
+Businesses leverage generative AI to analyze large datasets and generate summaries. This is particularly useful in fields like finance and research, where timely insights from vast amounts of data are crucial.</p>
+</li>
+<li>
+<p>Design and Creativity
+AI models can generate design prototypes, logos, and even artwork based on specific inputs. This aids designers in the creative process by providing inspiration and speeding up the initial stages of design work.</p>
+</li>
+<li>
+<p>Language Translation and Localization
+Generative AI offers advanced translation services that help businesses operate across different languages and regions. This enhances communication and allows for more effective international collaboration.</p>
+</li>
+</ol>
+<p>Maximizing the Benefits While Acknowledging the Limitations
+To harness the full potential of generative AI, businesses must understand its strengths and limitations. While AI may not be capable of true reasoning, its ability to process and generate content at scale is unparalleled. By integrating AI tools into workflows where pattern recognition and data processing are essential, companies can improve efficiency and drive innovation.</p>
+<p>However, tasks requiring nuanced understanding, ethical considerations, and complex decision-making should remain under human supervision. Combining the speed and efficiency of AI with human judgment creates a powerful synergy that can propel businesses forward.</p>
+<p>Conclusion
+Generative AI is a transformative technology with the power to revolutionize various aspects of business operations. By separating the hype from reality, organizations can make informed decisions about where and how to implement AI solutions effectively. Acknowledging that these models cannot reason like humans is essential in setting appropriate expectations and ensuring that AI serves as a tool to enhance, rather than replace, human capabilities.</p>
+<p>As the field of AI continues to evolve, staying informed about its developments and limitations will be crucial for businesses aiming to remain competitive in the digital age. Embracing generative AI's current applications while critically assessing its limitations will enable organizations to unlock new opportunities and drive growth responsibly.</p>]]></content>
         <author>
-            <name>Sébastien Lorber</name>
-            <uri>https://sebastienlorber.com</uri>
+            <name>o1 Preview</name>
+            <uri>https://chatgpt.com</uri>
         </author>
         <author>
-            <name>Yangshun Tay</name>
-            <uri>https://github.com/yangshun</uri>
+            <name>Sherman Boyd</name>
+            <uri>https://github.com/shermanhuman</uri>
         </author>
-        <category label="Facebook" term="Facebook"/>
-        <category label="Hello" term="Hello"/>
-        <category label="Docusaurus" term="Docusaurus"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MDX Blog Post]]></title>
-        <id>https://applesaucelabs.com/blog/mdx-blog-post</id>
-        <link href="https://applesaucelabs.com/blog/mdx-blog-post"/>
-        <updated>2021-08-01T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Blog posts support Docusaurus Markdown features, such as MDX.]]></summary>
-        <content type="html"><![CDATA[<p>Blog posts support <a href="https://docusaurus.io/docs/markdown-features" target="_blank" rel="noopener noreferrer">Docusaurus Markdown features</a>, such as <a href="https://mdxjs.com/" target="_blank" rel="noopener noreferrer">MDX</a>.</p>
-<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>tip</div><div class="admonitionContent_BuS1"><p>Use the power of React to create interactive blog posts.</p></div></div>
-<!-- -->
-<p>For example, use JSX to create an interactive button:</p>
-<div class="language-js codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-js codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">button onClick</span><span class="token operator" style="color:#393A34">=</span><span class="token punctuation" style="color:#393A34">{</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token arrow operator" style="color:#393A34">=&gt;</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">alert</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">'button clicked!'</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">}</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token maybe-class-name">Click</span><span class="token plain"> me</span><span class="token operator" style="color:#393A34">!</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token operator" style="color:#393A34">/</span><span class="token plain">button</span><span class="token operator" style="color:#393A34">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
-<button>Click me!</button>]]></content>
-        <author>
-            <name>Sébastien Lorber</name>
-            <uri>https://sebastienlorber.com</uri>
-        </author>
-        <category label="Docusaurus" term="Docusaurus"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Long Blog Post]]></title>
-        <id>https://applesaucelabs.com/blog/long-blog-post</id>
-        <link href="https://applesaucelabs.com/blog/long-blog-post"/>
-        <updated>2019-05-29T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[This is the summary of a very long blog post,]]></summary>
-        <content type="html"><![CDATA[<p>This is the summary of a very long blog post,</p>
-<p>Use a <code>&lt;!--</code> <code>truncate</code> <code>--&gt;</code> comment to limit blog post size in the list view.</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>]]></content>
-        <author>
-            <name>Yangshun Tay</name>
-            <uri>https://github.com/yangshun</uri>
-        </author>
-        <category label="Hello" term="Hello"/>
-        <category label="Docusaurus" term="Docusaurus"/>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[First Blog Post]]></title>
-        <id>https://applesaucelabs.com/blog/first-blog-post</id>
-        <link href="https://applesaucelabs.com/blog/first-blog-post"/>
-        <updated>2019-05-28T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Lorem ipsum dolor sit amet...]]></summary>
-        <content type="html"><![CDATA[<p>Lorem ipsum dolor sit amet...</p>
-<p>...consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet</p>]]></content>
-        <author>
-            <name>Sébastien Lorber</name>
-            <uri>https://sebastienlorber.com</uri>
-        </author>
-        <author>
-            <name>Yangshun Tay</name>
-            <uri>https://github.com/yangshun</uri>
-        </author>
-        <category label="Hola" term="Hola"/>
-        <category label="Docusaurus" term="Docusaurus"/>
+        <category label="Generative AI" term="Generative AI"/>
+        <category label="AI in Business" term="AI in Business"/>
+        <category label="AI Limitations" term="AI Limitations"/>
+        <category label="AI Hype vs. Reality" term="AI Hype vs. Reality"/>
+        <category label="Large Language Models" term="Large Language Models"/>
     </entry>
 </feed>
