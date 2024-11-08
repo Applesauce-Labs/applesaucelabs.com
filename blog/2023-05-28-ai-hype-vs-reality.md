@@ -7,6 +7,8 @@ tags: [generative-ai,ai-in-business,ai-limitations,ai-hype-vs-reality,large-lang
 
 The rise of generative AI, particularly large language models (LLMs), has been nothing short of meteoric. From generating human-like text to creating art, these models have captured the public's imagination and spurred a wave of optimism about the future of artificial intelligence. However, amidst the excitement, it's crucial to distinguish between hype and the real-world applications that can genuinely benefit businesses today.
 
+<!-- truncate -->
+
 The Hype vs. The Reality
 Generative AI has been heralded as a revolutionary technology capable of understanding and performing complex tasks across various domains. Headlines often suggest that AI is on the verge of achieving human-like reasoning and consciousness. While these claims make for compelling stories, they tend to overstate the current capabilities of AI.
 
