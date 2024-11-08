@@ -1,19 +1,26 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
+generative-ai:
+  label: Generative AI
+  permalink: /generative-ai
+  description: Posts related to generative AI and its real-world applications
 
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
+ai-in-business:
+  label: AI in Business
+  permalink: /ai-in-business
+  description: Exploring how AI technologies are applied in business contexts
 
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
+ai-limitations:
+  label: AI Limitations
+  permalink: /ai-limitations
+  description: Discussions on the limitations and challenges of AI
 
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+ai-hype-vs-reality:
+  label: AI Hype vs. Reality
+  permalink: /ai-hype-vs-reality
+  description: Separating the hype around AI from real-world capabilities
+
+large-language-models:
+  label: Large Language Models
+  permalink: /large-language-models
+  description: Topics covering LLMs and their impact on various industries
+
+
