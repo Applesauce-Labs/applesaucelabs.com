@@ -1,15 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import pathData from './pathData.json';
-
 import styles from './AnimatedTitle.module.css';
-
 
 interface Point {
   initialX: number;
   initialY: number;
   finalX: number;
   finalY: number;
-  morphStep: number;
+  morphStartTime: number | null;
   currentX: number;
   currentY: number;
 }
@@ -23,219 +21,225 @@ const AnimatedTitle: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-
     const resizeCanvas = () => {
       // Set the canvas dimensions to match its parent container's size
       canvas.width = canvas.parentElement?.offsetWidth || canvas.width;
       canvas.height = canvas.parentElement?.offsetHeight || canvas.height;
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
-      console.log("Canvas Width: ", canvasWidth, " Canvas Height: ", canvasHeight)
-  
-    
-      // ... rest of your animation logic using the new width and height
-    
-    const morphSteps = 100;
-    const spiralDuration = 3000; // milliseconds
-    const amplitude = 20;
-    const spiralTurns = 6;
-    const spiralWidth = 100;
-    const numPoints = 1400; // Adjust as needed
+      console.log("Canvas Width: ", canvasWidth, " Canvas Height: ", canvasHeight);
 
-    // Compute pathPoints from pathData
-    function computePathPoints(pathData: any[]): { x: number; y: number }[] {
-      const pathPoints: { x: number; y: number }[] = [];
-      let currentX = 0;
-      let currentY = 0;
-      pathData.forEach((command) => {
-        if (command.code === 'M') {
-          // Move to
-          currentX = command.x;
-          currentY = command.y;
-          pathPoints.push({ x: currentX, y: currentY });
-        } else if (command.code === 'C') {
-          // Cubic Bezier curve
-          const x0 = currentX;
-          const y0 = currentY;
-          const x1 = command.x1;
-          const y1 = command.y1;
-          const x2 = command.x2;
-          const y2 = command.y2;
-          const x3 = command.x;
-          const y3 = command.y;
+      const spiralDuration = 3000; // milliseconds
+      const amplitude = 20;
+      const spiralTurns = 6;
+      const spiralWidth = 100;
+      const numPoints = 1400; // Adjust as needed
+      const morphDuration = 500; // milliseconds
 
-          // Sample points along the curve
-          const numSamples = 20; // Adjust as needed
-          for (let t = 0; t <= 1; t += 1 / numSamples) {
-            const x = cubicBezier(x0, x1, x2, x3, t);
-            const y = cubicBezier(y0, y1, y2, y3, t);
-            pathPoints.push({ x, y });
+      // Compute pathPoints from pathData
+      function computePathPoints(pathData: any[]): { x: number; y: number }[] {
+        const pathPoints: { x: number; y: number }[] = [];
+        let currentX = 0;
+        let currentY = 0;
+        pathData.forEach((command) => {
+          if (command.code === 'M') {
+            // Move to
+            currentX = command.x;
+            currentY = command.y;
+            pathPoints.push({ x: currentX, y: currentY });
+          } else if (command.code === 'C') {
+            // Cubic Bezier curve
+            const x0 = currentX;
+            const y0 = currentY;
+            const x1 = command.x1;
+            const y1 = command.y1;
+            const x2 = command.x2;
+            const y2 = command.y2;
+            const x3 = command.x;
+            const y3 = command.y;
+
+            // Sample points along the curve
+            const numSamples = 20; // Adjust as needed
+            for (let t = 0; t <= 1; t += 1 / numSamples) {
+              const x = cubicBezier(x0, x1, x2, x3, t);
+              const y = cubicBezier(y0, y1, y2, y3, t);
+              pathPoints.push({ x, y });
+            }
+
+            currentX = x3;
+            currentY = y3;
           }
-
-          currentX = x3;
-          currentY = y3;
-        }
-        // Handle other commands if present
-      });
-      return pathPoints;
-    }
-
-    function cubicBezier(p0: number, p1: number, p2: number, p3: number, t: number): number {
-      const c0 = (1 - t) ** 3;
-      const c1 = 3 * (1 - t) ** 2 * t;
-      const c2 = 3 * (1 - t) * t ** 2;
-      const c3 = t ** 3;
-      return c0 * p0 + c1 * p1 + c2 * p2 + c3 * p3;
-    }
-
-    const pathPoints = computePathPoints(pathData);
-
-    // Compute bounding box
-    let minX = Infinity;
-    let maxX = -Infinity;
-    let minY = Infinity;
-    let maxY = -Infinity;
-
-    pathPoints.forEach((p) => {
-      if (p.x < minX) minX = p.x;
-      if (p.x > maxX) maxX = p.x;
-      if (p.y < minY) minY = p.y;
-      if (p.y > maxY) maxY = p.y;
-    });
-
-    const pathWidth = maxX - minX;
-    const pathHeight = maxY - minY;
-
-    // Compute scale and offsets
-    const scaleX = (canvasWidth * 0.8) / pathWidth;
-    const scaleY = (canvasHeight * 0.8) / pathHeight;
-    const scale = Math.min(scaleX, scaleY);
-
-    const offsetX = (canvasWidth - pathWidth * scale) / 2 - minX * scale;
-    const offsetY = (canvasHeight - pathHeight * scale) / 2 - minY * scale;
-
-    // Adjust pathPoints
-    pathPoints.forEach((p) => {
-      p.x = p.x * scale + offsetX;
-      p.y = p.y * scale + offsetY;
-    });
-
-    // Set lineY to match the starting Y position of the path
-    const lineY = pathPoints[0].y;
-
-    // Initialize points along the horizontal line aligned with the path
-    const points: Point[] = [];
-
-    for (let i = 0; i < numPoints; i++) {
-      const x = (i / (numPoints - 1)) * canvasWidth;
-      const y = lineY;
-      points.push({
-        initialX: x,
-        initialY: y,
-        finalX: 0, // To be set
-        finalY: 0, // To be set
-        morphStep: 0,
-        currentX: x,
-        currentY: y,
-      });
-    }
-
-    // Compute cumulative lengths
-    const cumulativeLengths: number[] = [0];
-    for (let i = 1; i < pathPoints.length; i++) {
-      const dx = pathPoints[i].x - pathPoints[i - 1].x;
-      const dy = pathPoints[i].y - pathPoints[i - 1].y;
-      const distance = Math.hypot(dx, dy);
-      cumulativeLengths.push(cumulativeLengths[i - 1] + distance);
-    }
-
-    const totalLength = cumulativeLengths[cumulativeLengths.length - 1];
-
-    // Assign final positions to points
-    for (let i = 0; i < numPoints; i++) {
-      const targetLength = (i / (numPoints - 1)) * totalLength;
-      // Find index j
-      let j = 0;
-      while (j < cumulativeLengths.length - 1 && cumulativeLengths[j + 1] < targetLength) {
-        j++;
+          // Handle other commands if present
+        });
+        return pathPoints;
       }
-      const lengthBefore = cumulativeLengths[j];
-      const lengthAfter = cumulativeLengths[j + 1];
-      const t = (targetLength - lengthBefore) / (lengthAfter - lengthBefore);
 
-      const x = pathPoints[j].x * (1 - t) + pathPoints[j + 1].x * t;
-      const y = pathPoints[j].y * (1 - t) + pathPoints[j + 1].y * t;
+      function cubicBezier(p0: number, p1: number, p2: number, p3: number, t: number): number {
+        const c0 = (1 - t) ** 3;
+        const c1 = 3 * (1 - t) ** 2 * t;
+        const c2 = 3 * (1 - t) * t ** 2;
+        const c3 = t ** 3;
+        return c0 * p0 + c1 * p1 + c2 * p2 + c3 * p3;
+      }
 
-      points[i].finalX = x;
-      points[i].finalY = y;
-    }
+      const pathPoints = computePathPoints(pathData);
 
-    const startTime = performance.now();
+      // Compute bounding box
+      let minX = Infinity;
+      let maxX = -Infinity;
+      let minY = Infinity;
+      let maxY = -Infinity;
 
-    function animate(time: number) {
-      const elapsed = time - startTime;
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+      pathPoints.forEach((p) => {
+        if (p.x < minX) minX = p.x;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.y > maxY) maxY = p.y;
+      });
 
-      // Compute spiral position
-      const spiralProgress = (elapsed % spiralDuration) / spiralDuration;
-      const spiralX = spiralProgress * canvasWidth;
+      const pathWidth = maxX - minX;
+      const pathHeight = maxY - minY;
 
-      // Draw points
-      for (let i = 0; i < points.length; i++) {
-        const point = points[i];
+      // Compute scale and offsets
+      const scaleX = (canvasWidth * 0.8) / pathWidth;
+      const scaleY = (canvasHeight * 0.8) / pathHeight;
+      const scale = Math.min(scaleX, scaleY);
 
-        // Base position based on morphStep
-        const t = point.morphStep / morphSteps;
-        const baseX = point.initialX * (1 - t) + point.finalX * t;
-        const baseY = point.initialY * (1 - t) + point.finalY * t;
+      const offsetX = (canvasWidth - pathWidth * scale) / 2 - minX * scale;
+      const offsetY = (canvasHeight - pathHeight * scale) / 2 - minY * scale;
 
-        // Check if spiral is over the point
-        const dx = point.initialX - spiralX;
-        if (Math.abs(dx) < spiralWidth / 2) {
-          // Spiral is over the point
+      // Adjust pathPoints
+      pathPoints.forEach((p) => {
+        p.x = p.x * scale + offsetX;
+        p.y = p.y * scale + offsetY;
+      });
 
-          // Apply temporary displacement
-          const angle = ((dx / (spiralWidth / 2)) * Math.PI * spiralTurns);
-          const spiralEffect = Math.sin(angle) * amplitude;
-          const displacedY = baseY + spiralEffect;
+      // Set lineY to match the starting Y position of the path
+      const lineY = pathPoints[0].y;
 
-          // Update point position
-          point.currentX = baseX;
-          point.currentY = displacedY;
+      // Initialize points along the horizontal line aligned with the path
+      const points: Point[] = [];
 
-          // Advance morphStep
-          if (point.morphStep < morphSteps) {
-            point.morphStep += 1;
+      for (let i = 0; i < numPoints; i++) {
+        const x = (i / (numPoints - 1)) * canvasWidth;
+        const y = lineY;
+        points.push({
+          initialX: x,
+          initialY: y,
+          finalX: 0, // To be set
+          finalY: 0, // To be set
+          morphStartTime: null, // Initialize as null
+          currentX: x,
+          currentY: y,
+        });
+      }
+
+      // Compute cumulative lengths
+      const cumulativeLengths: number[] = [0];
+      for (let i = 1; i < pathPoints.length; i++) {
+        const dx = pathPoints[i].x - pathPoints[i - 1].x;
+        const dy = pathPoints[i].y - pathPoints[i - 1].y;
+        const distance = Math.hypot(dx, dy);
+        cumulativeLengths.push(cumulativeLengths[i - 1] + distance);
+      }
+
+      const totalLength = cumulativeLengths[cumulativeLengths.length - 1];
+
+      // Assign final positions to points
+      for (let i = 0; i < numPoints; i++) {
+        const targetLength = (i / (numPoints - 1)) * totalLength;
+        let j = 0;
+        while (j < cumulativeLengths.length - 1 && cumulativeLengths[j + 1] < targetLength) {
+          j++;
+        }
+        const lengthBefore = cumulativeLengths[j];
+        const lengthAfter = cumulativeLengths[j + 1];
+        const t = (targetLength - lengthBefore) / (lengthAfter - lengthBefore);
+
+        const x = pathPoints[j].x * (1 - t) + pathPoints[j + 1].x * t;
+        const y = pathPoints[j].y * (1 - t) + pathPoints[j + 1].y * t;
+
+        points[i].finalX = x;
+        points[i].finalY = y;
+      }
+
+      const startTime = performance.now();
+
+      function animate(time: number) {
+        const elapsed = time - startTime;
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // Compute spiral position
+        const spiralProgress = (elapsed % spiralDuration) / spiralDuration;
+        const spiralX = spiralProgress * canvasWidth;
+
+        // Draw points
+        for (let i = 0; i < points.length; i++) {
+          const point = points[i];
+
+          // If spiral is over the point
+          const dx = point.initialX - spiralX;
+          if (Math.abs(dx) < spiralWidth / 2) {
+            // Spiral is over the point
+            // Start morphing if not already started
+            if (point.morphStartTime === null) {
+              point.morphStartTime = time;
+            }
+
+            // Apply temporary displacement
+            const angle = ((dx / (spiralWidth / 2)) * Math.PI * spiralTurns);
+            const spiralEffect = Math.sin(angle) * amplitude;
+            const displacedY = point.initialY + spiralEffect;
+
+            // Update point position
+            point.currentX = point.initialX;
+            point.currentY = displacedY;
+          } else {
+            // Spiral not over point
+            if (point.morphStartTime === null) {
+              // Not yet started morphing
+              point.currentX = point.initialX;
+              point.currentY = point.initialY;
+            }
           }
-        } else {
-          // Spiral not over point
-          point.currentX = baseX;
-          point.currentY = baseY;
+
+          let t = 0;
+          if (point.morphStartTime !== null) {
+            t = (time - point.morphStartTime) / morphDuration;
+            if (t > 1) t = 1;
+
+            // Base position based on t
+            const baseX = point.initialX * (1 - t) + point.finalX * t;
+            const baseY = point.initialY * (1 - t) + point.finalY * t;
+
+            // Update point.currentX and point.currentY
+            point.currentX = baseX;
+            point.currentY = baseY;
+          }
+
+          // Draw point
+          ctx.beginPath();
+          ctx.arc(point.currentX, point.currentY, 1, 0, Math.PI * 2);
+          ctx.fill();
         }
 
-        // Draw point
-        ctx.beginPath();
-        ctx.arc(point.currentX, point.currentY, 1, 0, Math.PI * 2);
-        ctx.fill();
+        requestAnimationFrame(animate);
       }
 
       requestAnimationFrame(animate);
-    }
+    };
 
-    requestAnimationFrame(animate);
-  };
+    // Initial canvas resize
+    resizeCanvas();
 
-  // Initial canvas resize
-  resizeCanvas();
+    // Listen for window resize events and update canvas dimensions
+    window.addEventListener('resize', resizeCanvas);
 
-  // Listen for window resize events and update canvas dimensions
-  window.addEventListener('resize', resizeCanvas);
-
-  // Clean up the event listener on component unmount
-  return () => {
-    window.removeEventListener('resize', resizeCanvas);
-  };
-}, []); 
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
 
   return (
     <div className={styles.canvasContainer}>
